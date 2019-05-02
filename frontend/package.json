@@ -1,5 +1,5 @@
 {
-  "name": "@shopgate-project/maintenance-mode",
+  "name": "@shopgate-project/ext-maintenance-mode",
   "version": "1.0.0",
   "description": "Activates a maintenance mode",
   "license": "Apache-2.0",

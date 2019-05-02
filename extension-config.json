@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "id": "@shopgate-project/maintenance-mode",
+  "id": "@shopgate-project/ext-maintenance-mode",
   "components": [
     {
       "id": "MaintenanceMode",
