@@ -1,0 +1,57 @@
+{
+  "version": "1.0.0",
+  "id": "@shopgate-project/maintenance-mode",
+  "components": [
+    {
+      "id": "MaintenanceMode",
+      "type": "portals",
+      "path": "frontend/portals/MaintenanceMode",
+      "target": "app.globals"
+    },
+    {
+      "type": "translations",
+      "path": "frontend/locale/de-DE.json",
+      "id": "locale/de-DE"
+    },
+    {
+      "type": "translations",
+      "path": "frontend/locale/en-US.json",
+      "id": "locale/en-US"
+    },
+    {
+      "type": "translations",
+      "path": "frontend/locale/es-ES.json",
+      "id": "locale/es-ES"
+    },
+    {
+      "type": "translations",
+      "path": "frontend/locale/fr-FR.json",
+      "id": "locale/fr-FR"
+    },
+    {
+      "type": "translations",
+      "path": "frontend/locale/it-IT.json",
+      "id": "locale/it-IT"
+    }
+  ],
+  "configuration": {
+    "enableMaintenanceMode": {
+      "type": "admin",
+      "destination": "frontend",
+      "default": false,
+      "params": {
+        "type": "checkbox",
+        "label": "Set to enable the Maintenance Mode"
+      }
+    },
+    "testUser": {
+      "type": "admin",
+      "destination": "frontend",
+      "default": [],
+      "params": {
+        "type": "json",
+        "label": "Set user email to disable the Maintenance Mode. Multiple emails possible."
+      }
+    }
+  }
+}

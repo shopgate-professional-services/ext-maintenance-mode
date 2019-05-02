@@ -1,0 +1,10 @@
+{
+  "maintenanceMode": {
+    "headline": {
+      "text": "Manutenzione"
+    },
+    "message": {
+      "text": "Questa app è temporaneamente non disponibile a causa di manutenzione."
+    }
+  }
+}
