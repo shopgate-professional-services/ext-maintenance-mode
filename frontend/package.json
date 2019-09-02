@@ -1,6 +1,6 @@
 {
   "name": "@shopgate-project/ext-maintenance-mode",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Activates a maintenance mode",
   "license": "Apache-2.0",
   "scripts": {

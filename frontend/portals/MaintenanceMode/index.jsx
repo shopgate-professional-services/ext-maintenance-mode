@@ -7,8 +7,12 @@ import { connect } from 'react-redux';
 import styles from './style';
 import getConfig from '../../helpers/getConfig';
 
-const { enableMaintenanceMode } = getConfig();
-const { testUser } = getConfig();
+const {
+  enableMaintenanceMode,
+  testUser,
+  customHeadline,
+  customMessage,
+} = getConfig();
 
 /**
  * MaintenanceMode component.
@@ -66,8 +70,10 @@ class MaintenanceMode extends Component {
         <div className={styles.background} >
           <div className={styles.container}>
             <img className={styles.image} src={appConfig.logo} alt={appConfig.shopName} />
-            <h3 onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd}><I18n.Text string="maintenanceMode.headline.text" /></h3>
-            <I18n.Text string="maintenanceMode.message.text" />
+            <h3 onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd}>
+              {customHeadline || <I18n.Text string="maintenanceMode.headline.text" />}
+            </h3>
+            {customMessage || <I18n.Text string="maintenanceMode.message.text" />}
           </div>
         </div>
       );

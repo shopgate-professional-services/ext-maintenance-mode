@@ -16,6 +16,10 @@ Activates a Maintenance Mode
 ],
 ```
 
+- customHeadline: Define a custom headline which will replace the default headline.
+
+- customMessage: Define a custom message which will replace the default message.
+
 ## About Shopgate
 
 Shopgate is the leading mobile commerce platform.
