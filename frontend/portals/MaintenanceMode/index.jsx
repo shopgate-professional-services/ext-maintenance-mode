@@ -4,6 +4,7 @@ import { getUserEmail } from '@shopgate/pwa-common/selectors/user';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import openPageExtern from '@shopgate/pwa-core/commands/openPageExtern';
 import styles from './style';
 import getConfig from '../../helpers/getConfig';
 
@@ -12,6 +13,9 @@ const {
   testUser,
   customHeadline,
   customMessage,
+  imageSource,
+  imageHref,
+  isText,
 } = getConfig();
 
 /**
@@ -55,19 +59,22 @@ class MaintenanceMode extends Component {
     clearTimeout(this.handleTouchTimeout);
   };
 
+
+  handleClick = () => {
+    openPageExtern({ src: imageHref });
+  };
+
   /**
    * Renders.
    * @returns {JSX}
    */
   render() {
+    if ( !isText && ( !imageSource || !imageHref )){
+      return null;
+    }
     const { userEmail } = this.props;
-    if (
-      enableMaintenanceMode &&
-      testUser.indexOf(userEmail) === -1 &&
-      this.state.showMaintenanceMode
-    ) {
-      return (
-        <div className={styles.background} >
+    const maintenanceInfo = isText ? (
+      <div className={styles.background} >
           <div className={styles.container}>
             <img className={styles.image} src={appConfig.logo} alt={appConfig.shopName} />
             <h3 onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd}>
@@ -76,7 +83,20 @@ class MaintenanceMode extends Component {
             {customMessage || <I18n.Text string="maintenanceMode.message.text" />}
           </div>
         </div>
-      );
+    ) : (
+      <div className={styles.background} >
+          <div className={styles.imagecontainer}>
+            <img className={styles.image} src={appConfig.logo} alt={appConfig.shopName} />
+            <button onClick={ this.handleClick }><img className={styles.image} src={imageSource} alt={appConfig.shopName} /></button>
+          </div>
+      </div>
+    );
+    if (
+      enableMaintenanceMode &&
+      testUser.indexOf(userEmail) === -1 &&
+      this.state.showMaintenanceMode
+    ) {
+      return maintenanceInfo;
     }
 
     return null;
