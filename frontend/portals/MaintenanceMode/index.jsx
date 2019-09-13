@@ -58,7 +58,6 @@ class MaintenanceMode extends Component {
     clearTimeout(this.handleTouchTimeout);
   };
 
-
   handleClick = () => {
     openPageExtern({ src: imageHref });
   };
@@ -73,8 +72,13 @@ class MaintenanceMode extends Component {
       (
         <div className={styles.background} >
           <div className={styles.imageContainer}>
-            <img className={styles.image} src={appConfig.logo} alt={appConfig.shopName} 
-                  onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd}/>
+            <img
+              className={styles.image}
+              src={appConfig.logo}
+              alt={appConfig.shopName}
+              onTouchStart={this.handleTouchStart}
+              onTouchEnd={this.handleTouchEnd}
+            />
             <button onClick={this.handleClick}>
               <img className={styles.image} src={imageSource} alt={appConfig.shopName} />
             </button>

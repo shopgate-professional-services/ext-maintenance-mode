@@ -39,5 +39,5 @@ export default {
   background,
   container,
   image,
-  imageContainer
+  imageContainer,
 };
