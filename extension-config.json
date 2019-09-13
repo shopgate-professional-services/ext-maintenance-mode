@@ -76,7 +76,7 @@
       "destination": "frontend",
       "default": "",
       "params": {
-        "label": "Define an image souce.",
+        "label": "Define an image source.",
         "type": "text"
       }
     },
@@ -87,15 +87,6 @@
       "params": {
         "label": "Define a url for the image.",
         "type": "text"
-      }
-    },
-    "isText": {
-      "type": "admin",
-      "destination": "frontend",
-      "default": true,
-      "params": {
-        "label": "Are you showing an image or text? Select True for text.",
-        "type": "boolean"
       }
     }
   }

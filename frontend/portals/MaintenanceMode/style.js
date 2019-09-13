@@ -19,7 +19,7 @@ const container = css({
   right: '5%',
 }).toString();
 
-const imagecontainer = css({
+const imageContainer = css({
   position: 'absolute',
   background: '#FFFFFF',
   textAlign: 'center',
@@ -35,10 +35,9 @@ const image = css({
   marginRight: 'auto',
 }).toString();
 
-
-
 export default {
   background,
   container,
   image,
+  imageContainer
 };

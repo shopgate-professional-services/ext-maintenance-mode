@@ -15,7 +15,6 @@ const {
   customMessage,
   imageSource,
   imageHref,
-  isText,
 } = getConfig();
 
 /**
@@ -69,12 +68,20 @@ class MaintenanceMode extends Component {
    * @returns {JSX}
    */
   render() {
-    if ( !isText && ( !imageSource || !imageHref )){
-      return null;
-    }
     const { userEmail } = this.props;
-    const maintenanceInfo = isText ? (
-      <div className={styles.background} >
+    const maintenanceInfo = (imageSource && imageHref) ?
+      (
+        <div className={styles.background} >
+          <div className={styles.imageContainer}>
+            <img className={styles.image} src={appConfig.logo} alt={appConfig.shopName} 
+                  onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd}/>
+            <button onClick={this.handleClick}>
+              <img className={styles.image} src={imageSource} alt={appConfig.shopName} />
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className={styles.background} >
           <div className={styles.container}>
             <img className={styles.image} src={appConfig.logo} alt={appConfig.shopName} />
             <h3 onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd}>
@@ -83,14 +90,7 @@ class MaintenanceMode extends Component {
             {customMessage || <I18n.Text string="maintenanceMode.message.text" />}
           </div>
         </div>
-    ) : (
-      <div className={styles.background} >
-          <div className={styles.imagecontainer}>
-            <img className={styles.image} src={appConfig.logo} alt={appConfig.shopName} />
-            <button onClick={ this.handleClick }><img className={styles.image} src={imageSource} alt={appConfig.shopName} /></button>
-          </div>
-      </div>
-    );
+      );
     if (
       enableMaintenanceMode &&
       testUser.indexOf(userEmail) === -1 &&

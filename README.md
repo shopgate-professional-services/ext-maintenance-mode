@@ -1,6 +1,6 @@
 # Maintenance Mode
 
-Activates a Maintenance Mode. Displays the store logo. Can display a custom headline and message or a linked image.
+Activates a Maintenance Mode. Displays the store logo. Can display a custom headline and message or a hyperlinked image.
 
 ## Configuration
 
@@ -23,8 +23,6 @@ Activates a Maintenance Mode. Displays the store logo. Can display a custom head
 - imageSource: Define the image url source.
 
 - imageHref: Define the url that opens when the image is selected.
-
-- isText: Select true if the custom headline and custom message should be displayed, otherwise the image is shown.
 
 ## About Shopgate
 
