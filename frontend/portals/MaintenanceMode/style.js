@@ -23,9 +23,9 @@ const imageContainer = css({
   position: 'absolute',
   background: '#FFFFFF',
   textAlign: 'center',
-  top: '0%',
-  left: '5%',
-  right: '5%',
+  top: '5%',
+  left: '2%',
+  right: '2%',
 }).toString();
 
 const image = css({
