@@ -4,6 +4,7 @@ import { getUserEmail } from '@shopgate/pwa-common/selectors/user';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import openPageExtern from '@shopgate/pwa-core/commands/openPageExtern';
 import styles from './style';
 import getConfig from '../../helpers/getConfig';
 
@@ -12,6 +13,8 @@ const {
   testUser,
   customHeadline,
   customMessage,
+  imageSource,
+  imageHref,
 } = getConfig();
 
 /**
@@ -55,18 +58,33 @@ class MaintenanceMode extends Component {
     clearTimeout(this.handleTouchTimeout);
   };
 
+  handleClick = () => {
+    openPageExtern({ src: imageHref });
+  };
+
   /**
    * Renders.
    * @returns {JSX}
    */
   render() {
     const { userEmail } = this.props;
-    if (
-      enableMaintenanceMode &&
-      testUser.indexOf(userEmail) === -1 &&
-      this.state.showMaintenanceMode
-    ) {
-      return (
+    const maintenanceInfo = (imageSource && imageHref) ?
+      (
+        <div className={styles.background} >
+          <div className={styles.imageContainer}>
+            <img
+              className={styles.image}
+              src={appConfig.logo}
+              alt={appConfig.shopName}
+              onTouchStart={this.handleTouchStart}
+              onTouchEnd={this.handleTouchEnd}
+            />
+            <button onClick={this.handleClick}>
+              <img className={styles.image} src={imageSource} alt={appConfig.shopName} />
+            </button>
+          </div>
+        </div>
+      ) : (
         <div className={styles.background} >
           <div className={styles.container}>
             <img className={styles.image} src={appConfig.logo} alt={appConfig.shopName} />
@@ -77,6 +95,12 @@ class MaintenanceMode extends Component {
           </div>
         </div>
       );
+    if (
+      enableMaintenanceMode &&
+      testUser.indexOf(userEmail) === -1 &&
+      this.state.showMaintenanceMode
+    ) {
+      return maintenanceInfo;
     }
 
     return null;

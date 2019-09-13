@@ -19,6 +19,15 @@ const container = css({
   right: '5%',
 }).toString();
 
+const imageContainer = css({
+  position: 'absolute',
+  background: '#FFFFFF',
+  textAlign: 'center',
+  top: '0%',
+  left: '5%',
+  right: '5%',
+}).toString();
+
 const image = css({
   maxWidth: '100%',
   display: 'block',
@@ -30,4 +39,5 @@ export default {
   background,
   container,
   image,
+  imageContainer,
 };
