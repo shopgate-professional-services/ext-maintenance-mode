@@ -1,6 +1,10 @@
 import appConfig from '@shopgate/pwa-common/helpers/config';
 import I18n from '@shopgate/pwa-common/components/I18n';
+import { Link } from '@shopgate/engage/components';
+import Button from '@shopgate/pwa-ui-shared/Button';
 import { getUserEmail } from '@shopgate/pwa-common/selectors/user';
+import { getClientInformation } from '@shopgate/engage/core';
+import { isIos } from '@shopgate/pwa-common/selectors/client';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -15,6 +19,12 @@ const {
   customMessage,
   imageSource,
   imageHref,
+  iosAppVersions,
+  iosLink,
+  iosButtonText,
+  androidAppVersions,
+  androidLink,
+  androidButtonText,
 } = getConfig();
 
 /**
@@ -22,10 +32,14 @@ const {
  */
 class MaintenanceMode extends Component {
   static propTypes = {
+    appVersion: PropTypes.string,
+    isIosDevice: PropTypes.bool,
     userEmail: PropTypes.string,
   };
 
   static defaultProps = {
+    appVersion: null,
+    isIosDevice: null,
     userEmail: null,
   };
 
@@ -63,14 +77,44 @@ class MaintenanceMode extends Component {
   };
 
   /**
+   * Checks if the app version is blocked.
+   * @param {string} appVersion App version
+   * @returns {bollean}
+   */
+  appVersionIsBlocked = (appVersion) => {
+    let appVersions = [];
+
+    if (this.props.isIosDevice) {
+      appVersions = iosAppVersions.replace(/ /g, '').split(',');
+    } else {
+      appVersions = androidAppVersions.replace(/ /g, '').split(',');
+    }
+
+    // All versions
+    if (appVersions.includes('')) {
+      return true;
+    }
+
+    // Client version
+    if (appVersions.includes(appVersion)) {
+      return true;
+    }
+
+    return false;
+  };
+
+  /**
    * Renders.
    * @returns {JSX}
    */
   render() {
-    const { userEmail } = this.props;
+    const {
+      userEmail, appVersion, isIosDevice,
+    } = this.props;
+
     const maintenanceInfo = (imageSource && imageHref) ?
       (
-        <div className={styles.background} >
+        <div className={styles.background}>
           <div className={styles.imageContainer}>
             <img
               className={styles.image}
@@ -79,7 +123,7 @@ class MaintenanceMode extends Component {
               onTouchStart={this.handleTouchStart}
               onTouchEnd={this.handleTouchEnd}
             />
-            <button onClick={this.handleClick}>
+            <button type="button" onClick={this.handleClick}>
               <img className={styles.image} src={imageSource} alt={appConfig.shopName} />
             </button>
           </div>
@@ -92,17 +136,27 @@ class MaintenanceMode extends Component {
               {customHeadline || <I18n.Text string="maintenanceMode.headline.text" />}
             </h3>
             {customMessage || <I18n.Text string="maintenanceMode.message.text" />}
+            {(!isIosDevice && androidLink) && (
+              <Link className={styles.linkButton} href={androidLink} state={{ target: '_blank' }}>
+                <Button>{androidButtonText}</Button>
+              </Link>
+            )}
+            {(isIosDevice && iosLink) && (
+              <Link className={styles.linkButton} href={iosLink} state={{ target: '_blank' }}>
+                <Button>{iosButtonText}</Button>
+              </Link>
+            )}
           </div>
         </div>
       );
     if (
       enableMaintenanceMode &&
       testUser.indexOf(userEmail) === -1 &&
-      this.state.showMaintenanceMode
+      this.state.showMaintenanceMode &&
+      this.appVersionIsBlocked(appVersion)
     ) {
       return maintenanceInfo;
     }
-
     return null;
   }
 }
@@ -112,6 +166,8 @@ class MaintenanceMode extends Component {
  * @return {string}
  */
 const mapStateToProps = state => ({
+  appVersion: getClientInformation(state).appVersion,
+  isIosDevice: isIos(state),
   userEmail: getUserEmail(state),
 });
 
