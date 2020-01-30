@@ -92,19 +92,19 @@
     "iosAppVersions": {
       "type": "admin",
       "destination": "frontend",
-      "default": "",
+      "default": [],
       "params": {
         "label": "Blocked iOS App Versions.",
-        "type": "text"
+        "type": "json"
       }
     },
     "androidAppVersions": {
       "type": "admin",
       "destination": "frontend",
-      "default": "",
+      "default": [],
       "params": {
         "label": "Blocked Android App Versions.",
-        "type": "text"
+        "type": "json"
       }
     },
     "iosLink": {

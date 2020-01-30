@@ -1,14 +1,10 @@
-import appConfig from '@shopgate/pwa-common/helpers/config';
-import I18n from '@shopgate/pwa-common/components/I18n';
-import { Link } from '@shopgate/engage/components';
-import Button from '@shopgate/pwa-ui-shared/Button';
-import { getUserEmail } from '@shopgate/pwa-common/selectors/user';
-import { getClientInformation } from '@shopgate/engage/core';
-import { isIos } from '@shopgate/pwa-common/selectors/client';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import openPageExtern from '@shopgate/pwa-core/commands/openPageExtern';
+import appConfig from '@shopgate/pwa-common/helpers/config';
+import { Link, Button, I18n } from '@shopgate/engage/components';
+import { getUserEmail } from '@shopgate/pwa-common/selectors/user';
+import { getClientInformation, isIos, openPageExtern } from '@shopgate/engage/core';
 import styles from './style';
 import getConfig from '../../helpers/getConfig';
 
@@ -79,19 +75,13 @@ class MaintenanceMode extends Component {
   /**
    * Checks if the app version is blocked.
    * @param {string} appVersion App version
-   * @returns {bollean}
+   * @returns {boolean}
    */
   appVersionIsBlocked = (appVersion) => {
-    let appVersions = [];
-
-    if (this.props.isIosDevice) {
-      appVersions = iosAppVersions.replace(/ /g, '').split(',');
-    } else {
-      appVersions = androidAppVersions.replace(/ /g, '').split(',');
-    }
+    const appVersions = this.props.isIosDevice ? iosAppVersions : androidAppVersions;
 
     // All versions
-    if (appVersions.includes('')) {
+    if (!appVersions.length) {
       return true;
     }
 
@@ -129,7 +119,7 @@ class MaintenanceMode extends Component {
           </div>
         </div>
       ) : (
-        <div className={styles.background} >
+        <div className={styles.background}>
           <div className={styles.container}>
             <img className={styles.image} src={appConfig.logo} alt={appConfig.shopName} />
             <h3 onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd}>
