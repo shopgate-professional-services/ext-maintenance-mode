@@ -17,8 +17,8 @@ Activates a Maintenance Mode. Displays the store logo. Can display a custom head
 - `customMessage`: Define a custom message which will replace the default message.
 - `imageSource`: Define the image url source.
 - `imageHref`: Define the url that opens when the image is selected.
-- `iosAppVersions`: The maintenance mode appears only for these iOS versions(e.g. `"10.46.0, 10.47.0, 10.47.1"`).
-- `androidAppVersions`: The maintenance mode appears only for these Android versions(e.g. `"5.18.0"`).
+- `iosAppVersions`: The maintenance mode appears only for these iOS versions(e.g. `["10.46.0", "10.47.0", "10.47.1"]`).
+- `androidAppVersions`: The maintenance mode appears only for these Android versions(e.g. `["5.18.0"]`).
 - `iosLink`: Define an external url for iOS devices. A button will be displayed that is linked to the external url.
 - `androidLink`: Define an external url for Android devices. A button will be displayed that is linked to the external url.
 - `iosButtonText`: Define a text for the link on iOS devices.

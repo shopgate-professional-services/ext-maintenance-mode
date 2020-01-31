@@ -80,17 +80,12 @@ class MaintenanceMode extends Component {
   appVersionIsBlocked = (appVersion) => {
     const appVersions = this.props.isIosDevice ? iosAppVersions : androidAppVersions;
 
-    // All versions
+    // Block all versions
     if (!appVersions.length) {
       return true;
     }
 
-    // Client version
-    if (appVersions.includes(appVersion)) {
-      return true;
-    }
-
-    return false;
+    return appVersions.includes(appVersion);
   };
 
   /**
@@ -141,7 +136,7 @@ class MaintenanceMode extends Component {
       );
     if (
       enableMaintenanceMode &&
-      testUser.indexOf(userEmail) === -1 &&
+      !testUser.includes(userEmail) &&
       this.state.showMaintenanceMode &&
       this.appVersionIsBlocked(appVersion)
     ) {
