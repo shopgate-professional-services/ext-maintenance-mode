@@ -35,9 +35,16 @@ const image = css({
   marginRight: 'auto',
 }).toString();
 
+const linkButton = css({
+  width: '100%',
+  textAlign: 'center',
+  margin: '15px 0',
+}).toString();
+
 export default {
   background,
   container,
   image,
   imageContainer,
+  linkButton,
 };
