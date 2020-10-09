@@ -2,7 +2,7 @@
 
 Activates a Maintenance Mode. Displays the store logo. Can display a custom headline and message or a hyperlinked image.
 
-Hint: Tab and hold the finger down on the maintenance page for 5s to hide it.
+Tab and hold the finger down on the maintenance page for 5s to hide it.
 
 ## Configuration
 
