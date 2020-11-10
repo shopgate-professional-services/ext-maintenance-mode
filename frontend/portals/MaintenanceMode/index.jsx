@@ -13,14 +13,13 @@ const {
   testUser,
   customHeadline,
   customMessage,
-  imageSource,
-  imageHref,
   iosAppVersions,
   iosLink,
   iosButtonText,
   androidAppVersions,
   androidLink,
   androidButtonText,
+  images,
 } = getConfig();
 
 /**
@@ -68,10 +67,6 @@ class MaintenanceMode extends Component {
     clearTimeout(this.handleTouchTimeout);
   };
 
-  handleClick = () => {
-    openPageExtern({ src: imageHref });
-  };
-
   /**
    * Checks if the app version is blocked.
    * @param {string} appVersion App version
@@ -97,7 +92,7 @@ class MaintenanceMode extends Component {
       userEmail, appVersion, isIosDevice,
     } = this.props;
 
-    const maintenanceInfo = (imageSource && imageHref) ?
+    const maintenanceInfo = (images && images.length) ?
       (
         <div className={styles.background}>
           <div className={styles.imageContainer}>
@@ -108,9 +103,11 @@ class MaintenanceMode extends Component {
               onTouchStart={this.handleTouchStart}
               onTouchEnd={this.handleTouchEnd}
             />
-            <button type="button" onClick={this.handleClick}>
-              <img className={styles.image} src={imageSource} alt={appConfig.shopName} />
-            </button>
+            {images.map(({ imageSource, imageHref}) => (
+              <button type="button" onClick={() => openPageExtern({ src: imageHref })}>
+                <img className={styles.image} src={imageSource} alt={appConfig.shopName} />
+              </button>
+            ))}
           </div>
         </div>
       ) : (

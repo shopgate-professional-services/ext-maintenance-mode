@@ -8,6 +8,8 @@ const background = css({
   width: '100%',
   left: 0,
   top: 0,
+  overflowY: 'scroll',
+  '-webkit-overflow-scrolling': 'touch',
 }).toString();
 
 const container = css({
