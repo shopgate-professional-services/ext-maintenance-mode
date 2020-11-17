@@ -20,6 +20,7 @@ const {
   androidLink,
   androidButtonText,
   images,
+  showShopLogo,
 } = getConfig();
 
 /**
@@ -96,13 +97,13 @@ class MaintenanceMode extends Component {
       (
         <div className={styles.background}>
           <div className={styles.imageContainer}>
-            <img
+            {showShopLogo && (<img
               className={styles.image}
               src={appConfig.logo}
               alt={appConfig.shopName}
               onTouchStart={this.handleTouchStart}
               onTouchEnd={this.handleTouchEnd}
-            />
+            />)}
             {images.map(({ imageSource, imageHref}) => (
               <button type="button" onClick={() => openPageExtern({ src: imageHref })}>
                 <img className={styles.image} src={imageSource} alt={appConfig.shopName} />
@@ -113,7 +114,7 @@ class MaintenanceMode extends Component {
       ) : (
         <div className={styles.background}>
           <div className={styles.container}>
-            <img className={styles.image} src={appConfig.logo} alt={appConfig.shopName} />
+            {showShopLogo && (<img className={styles.image} src={appConfig.logo} alt={appConfig.shopName} />)}
             <h3 onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd}>
               {customHeadline || <I18n.Text string="maintenanceMode.headline.text" />}
             </h3>

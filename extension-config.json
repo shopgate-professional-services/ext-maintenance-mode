@@ -1,5 +1,5 @@
 {
-  "version": "2.0.1",
+  "version": "2.1.0-rc.1",
   "id": "@shopgate-project/ext-maintenance-mode",
   "components": [
     {
@@ -42,6 +42,15 @@
       "params": {
         "type": "checkbox",
         "label": "Set to enable the Maintenance Mode"
+      }
+    },
+    "showShopLogo": {
+      "type": "admin",
+      "destination": "frontend",
+      "default": true,
+      "params": {
+        "type": "checkbox",
+        "label": "Show shop logo"
       }
     },
     "testUser": {
