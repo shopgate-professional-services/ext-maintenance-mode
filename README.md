@@ -24,6 +24,8 @@ Tab and hold the finger down on the maintenance page for 5s to hide it.
 - `androidLink`: Define an external url for Android devices. A button will be displayed that is linked to the external url.
 - `iosButtonText`: Define a text for the link on iOS devices.
 - `androidButtonText`: Define a text for the link button on Android devices.
+- `startDate`: Define a start date for the maintenance mode. You can also only define a start or an end date. Format: YYYY/MM/DD - HH:mm (e.g. `["2023/04/20 - 00:00"]`).
+- `endDate`: Define a end date for the maintenance mode. You can also only define a start or an end date. Format: YYYY/MM/DD - HH:mm (e.g. `["2023/05/17 - 10:00"]`).
 
 ## About Shopgate
 

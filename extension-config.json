@@ -1,5 +1,5 @@
 {
-  "version": "2.1.0-rc.1",
+  "version": "2.2.0-rc.1",
   "id": "@shopgate-project/ext-maintenance-mode",
   "components": [
     {
@@ -140,6 +140,24 @@
       "default": "Link",
       "params": {
         "label": "Text of the link button(Android).",
+        "type": "text"
+      }
+    },
+    "startDate": {
+      "type": "admin",
+      "destination": "frontend",
+      "default": "",
+      "params": {
+        "label": "Start date - Format: YYYY/MM/DD - HH:mm",
+        "type": "text"
+      }
+    },
+    "endDate": {
+      "type": "admin",
+      "destination": "frontend",
+      "default": "",
+      "params": {
+        "label": "End date - Format: YYYY/MM/DD - HH:mm",
         "type": "text"
       }
     }

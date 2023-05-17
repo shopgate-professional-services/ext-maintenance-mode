@@ -21,6 +21,8 @@ const {
   androidButtonText,
   images,
   showShopLogo,
+  startDate,
+  endDate,
 } = getConfig();
 
 /**
@@ -85,6 +87,34 @@ class MaintenanceMode extends Component {
   };
 
   /**
+   * Checks Dates.
+   * @returns {boolean}
+   */
+  checkDate = () => {
+    const parseStartDate = startDate.replaceAll('/', '-').replace(' - ', 'T');
+    const parseEndDate = endDate.replaceAll('/', '-').replace(' - ', 'T');
+
+    const now = new Date();
+
+    if (!startDate && !endDate) {
+      // no times provide. so its always valid
+      return true;
+    }
+
+    if (!startDate) {
+      // no start date given. only check valid end date
+      return new Date(parseEndDate) > now;
+    }
+
+    if (!endDate) {
+      // no end date given. only check valid start date
+      return new Date(parseStartDate) < now;
+    }
+
+    return new Date(parseStartDate) < now && new Date(parseEndDate) > now;
+  };
+
+  /**
    * Renders.
    * @returns {JSX}
    */
@@ -104,7 +134,7 @@ class MaintenanceMode extends Component {
               onTouchStart={this.handleTouchStart}
               onTouchEnd={this.handleTouchEnd}
             />)}
-            {images.map(({ imageSource, imageHref}) => (
+            {images.map(({ imageSource, imageHref }) => (
               <button type="button" onClick={() => openPageExtern({ src: imageHref })}>
                 <img className={styles.image} src={imageSource} alt={appConfig.shopName} />
               </button>
@@ -114,7 +144,9 @@ class MaintenanceMode extends Component {
       ) : (
         <div className={styles.background}>
           <div className={styles.container}>
-            {showShopLogo && (<img className={styles.image} src={appConfig.logo} alt={appConfig.shopName} />)}
+            {showShopLogo &&
+              (<img className={styles.image} src={appConfig.logo} alt={appConfig.shopName} />)
+            }
             <h3 onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd}>
               {customHeadline || <I18n.Text string="maintenanceMode.headline.text" />}
             </h3>
@@ -136,7 +168,8 @@ class MaintenanceMode extends Component {
       enableMaintenanceMode &&
       !testUser.includes(userEmail) &&
       this.state.showMaintenanceMode &&
-      this.appVersionIsBlocked(appVersion)
+      this.appVersionIsBlocked(appVersion) &&
+      this.checkDate()
     ) {
       return maintenanceInfo;
     }
