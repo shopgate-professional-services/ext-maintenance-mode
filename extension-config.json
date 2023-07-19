@@ -160,6 +160,15 @@
         "label": "End date - Format: YYYY/MM/DD - HH:mm",
         "type": "text"
       }
+    },
+    "maintenancePagesWhitelist": {
+      "type": "admin",
+      "destination": "frontend",
+      "default": [],
+      "params": {
+        "label": "Whitelist that enables maintenance mode only for configured pages",
+        "type": "text"
+      }
     }
   }
 }
