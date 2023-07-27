@@ -123,8 +123,9 @@ class MaintenanceMode extends Component {
    * @param {Object} currentRoute App version
    * @returns {boolean}
    */
-   hasPageWhiteList = currentRoute => maintenancePagesWhitelist.includes(currentRoute.pattern) ||
-   maintenancePagesWhitelist.length === 0;
+   pageWhitelistStatus = currentRoute => maintenancePagesWhitelist
+     .findIndex(element => currentRoute.pattern.includes(element)) >= 0 ||
+     maintenancePagesWhitelist.length === 0;
 
    /**
    * Renders.
@@ -178,7 +179,7 @@ class MaintenanceMode extends Component {
        );
      if (
        enableMaintenanceMode &&
-       this.hasPageWhiteList(currentRoute) &&
+       this.pageWhitelistStatus(currentRoute) &&
        !testUser.includes(userEmail) &&
        this.state.showMaintenanceMode &&
        this.appVersionIsBlocked(appVersion) &&
