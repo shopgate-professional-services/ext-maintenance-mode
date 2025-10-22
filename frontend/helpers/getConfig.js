@@ -1,4 +1,4 @@
-import { logger } from '@shopgate/pwa-core/helpers';
+import { logger } from '@shopgate/engage/core/helpers';
 
 let cached;
 

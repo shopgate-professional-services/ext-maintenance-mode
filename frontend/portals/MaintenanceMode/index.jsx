@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import appConfig from '@shopgate/pwa-common/helpers/config';
-import { getCurrentRoute } from '@shopgate/pwa-common/helpers/router';
+import { appConfig } from '@shopgate/engage';
+import { getCurrentRouteHelper as getCurrentRoute } from '@shopgate/engage/core/helpers';
+import {
+  getClientInformation,
+  isIos,
+} from '@shopgate/engage/core/selectors';
+import { openPageExtern } from '@shopgate/engage/core/commands';
 import { Link, Button, I18n } from '@shopgate/engage/components';
 import { IS_PAGE_PREVIEW_ACTIVE } from '@shopgate/engage/page/constants';
-import { getUserEmail } from '@shopgate/pwa-common/selectors/user';
-import { getClientInformation, isIos, openPageExtern } from '@shopgate/engage/core';
+import { getUserEmail } from '@shopgate/engage/user';
 import styles from './style';
 import getConfig from '../../helpers/getConfig';
 
