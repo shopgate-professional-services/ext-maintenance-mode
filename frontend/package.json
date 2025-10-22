@@ -11,6 +11,6 @@
     "react-redux": "^8.1.3"
   },
   "peerDependencies": {
-    "@shopgate/engage": "^7.20.0"
+    "@shopgate/engage": ">=7.20.0"
   }
 }
