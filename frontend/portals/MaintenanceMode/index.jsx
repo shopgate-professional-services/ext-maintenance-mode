@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import appConfig from '@shopgate/pwa-common/helpers/config';
-import { getCurrentRoute } from '@shopgate/pwa-common/helpers/router';
+import { appConfig } from '@shopgate/engage';
+import { getCurrentRouteHelper as getCurrentRoute } from '@shopgate/engage/core/helpers';
+import {
+  getClientInformation,
+  isIos,
+} from '@shopgate/engage/core/selectors';
+import { openPageExtern } from '@shopgate/engage/core/commands';
 import { Link, Button, I18n } from '@shopgate/engage/components';
-import { getUserEmail } from '@shopgate/pwa-common/selectors/user';
-import { getClientInformation, isIos, openPageExtern } from '@shopgate/engage/core';
+import { IS_PAGE_PREVIEW_ACTIVE } from '@shopgate/engage/page/constants';
+import { getUserEmail } from '@shopgate/engage/user';
 import styles from './style';
 import getConfig from '../../helpers/getConfig';
 
@@ -118,77 +123,78 @@ class MaintenanceMode extends Component {
     return new Date(parseStartDate) < now && new Date(parseEndDate) > now;
   };
 
-   /**
-   * Checks if there is a page whitelist and only enables maintenance for these pages.
-   * @param {Object} currentRoute App version
-   * @returns {boolean}
-   */
-   pageWhitelistStatus = currentRoute => maintenancePagesWhitelist
-     .findIndex(element => currentRoute.pattern.includes(element)) >= 0 ||
-     maintenancePagesWhitelist.length === 0;
+  /**
+  * Checks if there is a page whitelist and only enables maintenance for these pages.
+  * @param {Object} currentRoute App version
+  * @returns {boolean}
+  */
+  pageWhitelistStatus = currentRoute => maintenancePagesWhitelist
+    .findIndex(element => currentRoute.pattern.includes(element)) >= 0 ||
+    maintenancePagesWhitelist.length === 0;
 
-   /**
-   * Renders.
-   * @returns {JSX}
-   */
-   render() {
-     const {
-       userEmail, appVersion, currentRoute, isIosDevice,
-     } = this.props;
+  /**
+  * Renders.
+  * @returns {JSX}
+  */
+  render() {
+    const {
+      userEmail, appVersion, currentRoute, isIosDevice,
+    } = this.props;
 
-     const maintenanceInfo = (images && images.length) ?
-       (
-         <div className={styles.background}>
-           <div className={styles.imageContainer}>
-             {showShopLogo && (<img
-               className={styles.image}
-               src={appConfig.logo}
-               alt={appConfig.shopName}
-               onTouchStart={this.handleTouchStart}
-               onTouchEnd={this.handleTouchEnd}
-             />)}
-             {images.map(({ imageSource, imageHref }) => (
-               <button type="button" onClick={() => openPageExtern({ src: imageHref })}>
-                 <img className={styles.image} src={imageSource} alt={appConfig.shopName} />
-               </button>
-             ))}
-           </div>
-         </div>
-       ) : (
-         <div className={styles.background}>
-           <div className={styles.container}>
-             {showShopLogo &&
-                (<img className={styles.image} src={appConfig.logo} alt={appConfig.shopName} />)
-             }
-             <h3 onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd}>
-               {customHeadline || <I18n.Text string="maintenanceMode.headline.text" />}
-             </h3>
-             {customMessage || <I18n.Text string="maintenanceMode.message.text" />}
-             {(!isIosDevice && androidLink) && (
-               <Link className={styles.linkButton} href={androidLink} state={{ target: '_blank' }}>
-                 <Button>{androidButtonText}</Button>
-               </Link>
-             )}
-             {(isIosDevice && iosLink) && (
-               <Link className={styles.linkButton} href={iosLink} state={{ target: '_blank' }}>
-                 <Button>{iosButtonText}</Button>
-               </Link>
-             )}
-           </div>
-         </div>
-       );
-     if (
-       enableMaintenanceMode &&
-       this.pageWhitelistStatus(currentRoute) &&
-       !testUser.includes(userEmail) &&
-       this.state.showMaintenanceMode &&
-       this.appVersionIsBlocked(appVersion) &&
-       this.checkDate()
-     ) {
-       return maintenanceInfo;
-     }
-     return null;
-   }
+    const maintenanceInfo = (images && images.length) ?
+      (
+        <div className={styles.background}>
+          <div className={styles.imageContainer}>
+            {showShopLogo && (<img
+              className={styles.image}
+              src={appConfig.logo}
+              alt={appConfig.shopName}
+              onTouchStart={this.handleTouchStart}
+              onTouchEnd={this.handleTouchEnd}
+            />)}
+            {images.map(({ imageSource, imageHref }) => (
+              <button type="button" onClick={() => openPageExtern({ src: imageHref })}>
+                <img className={styles.image} src={imageSource} alt={appConfig.shopName} />
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className={styles.background}>
+          <div className={styles.container}>
+            {showShopLogo &&
+              (<img className={styles.image} src={appConfig.logo} alt={appConfig.shopName} />)
+            }
+            <h3 onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd}>
+              {customHeadline || <I18n.Text string="maintenanceMode.headline.text" />}
+            </h3>
+            {customMessage || <I18n.Text string="maintenanceMode.message.text" />}
+            {(!isIosDevice && androidLink) && (
+              <Link className={styles.linkButton} href={androidLink} state={{ target: '_blank' }}>
+                <Button>{androidButtonText}</Button>
+              </Link>
+            )}
+            {(isIosDevice && iosLink) && (
+              <Link className={styles.linkButton} href={iosLink} state={{ target: '_blank' }}>
+                <Button>{iosButtonText}</Button>
+              </Link>
+            )}
+          </div>
+        </div>
+      );
+    if (
+      !IS_PAGE_PREVIEW_ACTIVE &&
+      enableMaintenanceMode &&
+      this.pageWhitelistStatus(currentRoute) &&
+      !testUser.includes(userEmail) &&
+      this.state.showMaintenanceMode &&
+      this.appVersionIsBlocked(appVersion) &&
+      this.checkDate()
+    ) {
+      return maintenanceInfo;
+    }
+    return null;
+  }
 }
 
 /**

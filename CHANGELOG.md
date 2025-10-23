@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.0 - 2024-10-22
+### Fixed
+- Disabled extension in CMS 2.0 preview
+
 ## [2.3.0] - 2024-04-23
 ### Fixed
 - Fixed release version due to version upload mistakes.
