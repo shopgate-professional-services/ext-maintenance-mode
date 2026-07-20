@@ -13,6 +13,7 @@ import { IS_PAGE_PREVIEW_ACTIVE } from '@shopgate/engage/page/constants';
 import { getUserEmail } from '@shopgate/engage/user';
 import styles from './style';
 import getConfig from '../../helpers/getConfig';
+import toZonedDate from '../../helpers/toZonedDate';
 
 const {
   enableMaintenanceMode,
@@ -29,6 +30,7 @@ const {
   showShopLogo,
   startDate,
   endDate,
+  timezone,
   maintenancePagesWhitelist,
 } = getConfig();
 
@@ -97,9 +99,14 @@ class MaintenanceMode extends Component {
 
   /**
    * Checks Dates.
+   * When a `timezone` (IANA name, e.g. "Europe/Berlin") is configured, the
+   * start/end wall-clock times are interpreted in that fixed time zone
+   * (daylight saving aware). Without it they fall back to the device's local
+   * time zone, i.e. the previous behaviour.
    * @returns {boolean}
    */
   checkDate = () => {
+    // Convert "YYYY/MM/DD - HH:mm" to a wall-clock ISO-like string "YYYY-MM-DDTHH:mm".
     const parseStartDate = startDate.replaceAll('/', '-').replace(' - ', 'T');
     const parseEndDate = endDate.replaceAll('/', '-').replace(' - ', 'T');
 
@@ -112,15 +119,16 @@ class MaintenanceMode extends Component {
 
     if (!startDate) {
       // no start date given. only check valid end date
-      return new Date(parseEndDate) > now;
+      return toZonedDate(parseEndDate, timezone) > now;
     }
 
     if (!endDate) {
       // no end date given. only check valid start date
-      return new Date(parseStartDate) < now;
+      return toZonedDate(parseStartDate, timezone) < now;
     }
 
-    return new Date(parseStartDate) < now && new Date(parseEndDate) > now;
+    return toZonedDate(parseStartDate, timezone) < now &&
+      toZonedDate(parseEndDate, timezone) > now;
   };
 
   /**

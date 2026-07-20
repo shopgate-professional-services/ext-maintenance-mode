@@ -1,5 +1,5 @@
 {
-  "version": "2.4.0",
+  "version": "2.5.0",
   "id": "@shopgate-project/ext-maintenance-mode",
   "components": [
     {
@@ -143,12 +143,21 @@
         "type": "text"
       }
     },
+    "timezone": {
+      "type": "admin",
+      "destination": "frontend",
+      "default": "",
+      "params": {
+        "label": "Timezone for start/end date as IANA name, e.g. Europe/Berlin. Leave empty to use the device time.",
+        "type": "text"
+      }
+    },
     "startDate": {
       "type": "admin",
       "destination": "frontend",
       "default": "",
       "params": {
-        "label": "Start date - Format: YYYY/MM/DD - HH:mm",
+        "label": "Start date - Format: YYYY/MM/DD - HH:mm (interpreted in the configured timezone)",
         "type": "text"
       }
     },
@@ -157,7 +166,7 @@
       "destination": "frontend",
       "default": "",
       "params": {
-        "label": "End date - Format: YYYY/MM/DD - HH:mm",
+        "label": "End date - Format: YYYY/MM/DD - HH:mm (interpreted in the configured timezone)",
         "type": "text"
       }
     },

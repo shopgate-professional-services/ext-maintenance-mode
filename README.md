@@ -24,8 +24,9 @@ Tab and hold the finger down on the maintenance page for 5s to hide it.
 - `androidLink`: Define an external url for Android devices. A button will be displayed that is linked to the external url.
 - `iosButtonText`: Define a text for the link on iOS devices.
 - `androidButtonText`: Define a text for the link button on Android devices.
-- `startDate`: Define a start date for the maintenance mode. You can also only define a start or an end date. Format: YYYY/MM/DD - HH:mm (e.g. `"2023/04/20 - 00:00"`).
-- `endDate`: Define a end date for the maintenance mode. You can also only define a start or an end date. Format: YYYY/MM/DD - HH:mm (e.g. `"2023/05/17 - 10:00"`).
+- `timezone`: Fixed time zone in which `startDate` and `endDate` are interpreted, given as an IANA name (e.g. `"Europe/Berlin"`). Daylight saving time is handled automatically. Leave it empty to interpret the dates in the device's local time zone (the previous behaviour).
+- `startDate`: Define a start date for the maintenance mode. You can also only define a start or an end date. Format: YYYY/MM/DD - HH:mm (e.g. `"2023/04/20 - 00:00"`). Interpreted in the configured `timezone`.
+- `endDate`: Define a end date for the maintenance mode. You can also only define a start or an end date. Format: YYYY/MM/DD - HH:mm (e.g. `"2023/05/17 - 10:00"`). Interpreted in the configured `timezone`.
 - `maintenancePagesWhitelist`: Whitelist that enables the maintenance mode only for configured pages (e.g. `["/cart"]`).
 
 
