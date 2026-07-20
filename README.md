@@ -29,6 +29,23 @@ Tab and hold the finger down on the maintenance page for 5s to hide it.
 - `endDate`: Define a end date for the maintenance mode. You can also only define a start or an end date. Format: YYYY/MM/DD - HH:mm (e.g. `"2023/05/17 - 10:00"`). Interpreted in the configured `timezone`.
 - `maintenancePagesWhitelist`: Whitelist that enables the maintenance mode only for configured pages (e.g. `["/cart"]`).
 
+## Scheduling with a fixed timezone
+
+`startDate` and `endDate` are wall-clock times. Without `timezone` they are interpreted in each shopper's device timezone, so the maintenance window would start at a different absolute moment per device. Set `timezone` to a fixed IANA name to make the window start and end at the same real moment for everyone, regardless of where the shopper is. Daylight saving time is applied automatically for the given zone.
+
+Example – maintenance from 22:00 to 23:00 Berlin time on 2024/05/17:
+
+```json
+{
+  "enableMaintenanceMode": true,
+  "timezone": "Europe/Berlin",
+  "startDate": "2024/05/17 - 22:00",
+  "endDate": "2024/05/17 - 23:00"
+}
+```
+
+With this configuration the maintenance page shows between 22:00 and 23:00 in Berlin (i.e. 20:00–21:00 UTC in summer) for every shopper, no matter their device timezone. Leaving `timezone` empty keeps the previous behaviour (each device's local time).
+
 
 ## About Shopgate
 
