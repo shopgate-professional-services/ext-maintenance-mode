@@ -27,7 +27,7 @@ Tab and hold the finger down on the maintenance page for 5s to hide it.
 - `timezone`: Fixed time zone in which `startDate` and `endDate` are interpreted, given as an IANA name (e.g. `"Europe/Berlin"`). Daylight saving time is handled automatically. Leave it empty to interpret the dates in the device's local time zone (the previous behaviour).
 - `startDate`: Define a start date for the maintenance mode. You can also only define a start or an end date. Format: YYYY/MM/DD - HH:mm (e.g. `"2023/04/20 - 00:00"`). Interpreted in the configured `timezone`.
 - `endDate`: Define a end date for the maintenance mode. You can also only define a start or an end date. Format: YYYY/MM/DD - HH:mm (e.g. `"2023/05/17 - 10:00"`). Interpreted in the configured `timezone`.
-- `maintenancePagesWhitelist`: Whitelist that enables the maintenance mode only for configured pages (e.g. `["/cart"]`).
+- `maintenancePagesWhitelist`: Whitelist that enables the maintenance mode only for configured pages (e.g. `["/cart"]`). An entry matches when it is contained in the route pattern of a page (e.g. `"/item"` matches every product page) or in the path of the page (e.g. `"/category/373036"` matches that single category page). An empty list enables the maintenance mode on every page.
 
 ## Scheduling with a fixed timezone
 

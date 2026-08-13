@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.5.1 - 2026-08-13
+### Fixed
+- Whitelist entries in `maintenancePagesWhitelist` that name a concrete page (e.g. `/category/373036`) now match. They were compared against the route pattern of the current page only (`/category/:categoryId`), so such an entry never matched and the maintenance mode stayed hidden on every page.
+
 ## 2.5.0 - 2026-07-20
 ### Added
 - Adds a `timezone` config option (IANA name, e.g. `Europe/Berlin`) so the scheduled start/end dates are interpreted in a fixed, daylight-saving-aware time zone instead of the device's local time. Leaving it empty keeps the previous behaviour.

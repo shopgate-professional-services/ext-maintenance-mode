@@ -14,6 +14,7 @@ import { getUserEmail } from '@shopgate/engage/user';
 import styles from './style';
 import getConfig from '../../helpers/getConfig';
 import toZonedDate from '../../helpers/toZonedDate';
+import isPageWhitelisted from '../../helpers/isPageWhitelisted';
 
 const {
   enableMaintenanceMode,
@@ -133,12 +134,12 @@ class MaintenanceMode extends Component {
 
   /**
   * Checks if there is a page whitelist and only enables maintenance for these pages.
-  * @param {Object} currentRoute App version
+  * An entry is matched against the route pattern of the current page and against
+  * its path, so both "/item" and "/category/373036" work.
+  * @param {Object} currentRoute The current route
   * @returns {boolean}
   */
-  pageWhitelistStatus = currentRoute => maintenancePagesWhitelist
-    .findIndex(element => currentRoute.pattern.includes(element)) >= 0 ||
-    maintenancePagesWhitelist.length === 0;
+  pageWhitelistStatus = currentRoute => isPageWhitelisted(maintenancePagesWhitelist, currentRoute);
 
   /**
   * Renders.
