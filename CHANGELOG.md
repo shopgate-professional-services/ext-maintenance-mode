@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.5.1] 2026-09-16
+### Removed
+- pwa peerDependencies version check
+
 ## 2.5.0 - 2026-07-20
 ### Added
 - Adds a `timezone` config option (IANA name, e.g. `Europe/Berlin`) so the scheduled start/end dates are interpreted in a fixed, daylight-saving-aware time zone instead of the device's local time. Leaving it empty keeps the previous behaviour.
