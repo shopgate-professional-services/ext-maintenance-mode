@@ -66,4 +66,3 @@ frontend/config.json
 .idea
 
 frontend/yarn.lock
-frontend/package-lock.json
