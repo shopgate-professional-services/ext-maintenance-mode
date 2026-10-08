@@ -1,0 +1,10 @@
+{
+  "maintenanceMode": {
+    "headline": {
+      "text": "Mentenanță"
+    },
+    "message": {
+      "text": "Această aplicație este temporar indisponibilă din cauza lucrărilor de mentenanță."
+    }
+  }
+}
