@@ -1,0 +1,10 @@
+{
+  "maintenanceMode": {
+    "headline": {
+      "text": "Údržba"
+    },
+    "message": {
+      "text": "Tato aplikace je dočasně nedostupná z důvodu údržby."
+    }
+  }
+}

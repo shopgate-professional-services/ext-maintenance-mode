@@ -10,7 +10,7 @@ function getConfig() {
   if (!cached) {
     try {
       // eslint-disable-next-line global-require
-      cached = require('../config');
+      cached = require('../config.json');
     } catch (e) {
       logger.error('Could not read config.', e);
       cached = {};

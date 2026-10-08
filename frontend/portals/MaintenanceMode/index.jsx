@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import React, { useCallback, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { appConfig } from '@shopgate/engage';
 import { getCurrentRouteHelper as getCurrentRoute } from '@shopgate/engage/core/helpers';
 import {
   getClientInformation,
-  isIos,
+  getIsIos,
 } from '@shopgate/engage/core/selectors';
 import { openPageExtern } from '@shopgate/engage/core/commands';
-import { Link, Button, I18n } from '@shopgate/engage/components';
+import { Link, I18n } from '@shopgate/engage/components';
+import { Button } from '@shopgate/engage/components/v2';
 import { IS_PAGE_PREVIEW_ACTIVE } from '@shopgate/engage/page/constants';
 import { getUserEmail } from '@shopgate/engage/user';
-import styles from './style';
+import { makeStyles } from '@shopgate/engage/styles';
 import getConfig from '../../helpers/getConfig';
 import toZonedDate from '../../helpers/toZonedDate';
 
@@ -34,186 +34,191 @@ const {
   maintenancePagesWhitelist,
 } = getConfig();
 
+const TOUCH_TIMEOUT = 5000;
+
+const useStyles = makeStyles()(theme => ({
+  background: {
+    background: theme.palette.background.default,
+    position: 'fixed',
+    zIndex: 5000,
+    height: '100%',
+    width: '100%',
+    left: 0,
+    top: 0,
+    overflowY: 'scroll',
+    WebkitOverflowScrolling: 'touch',
+  },
+  container: {
+    position: 'absolute',
+    textAlign: 'center',
+    top: '25%',
+    left: '5%',
+    right: '5%',
+  },
+  imageContainer: {
+    position: 'absolute',
+    textAlign: 'center',
+    top: '5%',
+    left: '2%',
+    right: '2%',
+  },
+  image: {
+    maxWidth: '100%',
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  linkButton: {
+    width: '100%',
+    textAlign: 'center',
+    margin: '15px 0',
+  },
+}));
+
+/**
+ * Checks if the app version is blocked.
+ * @param {boolean} isIosDevice Whether the current device runs iOS.
+ * @param {string} appVersion App version.
+ * @returns {boolean}
+ */
+const appVersionIsBlocked = (isIosDevice, appVersion) => {
+  const appVersions = isIosDevice ? iosAppVersions : androidAppVersions;
+
+  // Block all versions
+  if (!appVersions.length) {
+    return true;
+  }
+
+  return appVersions.includes(appVersion);
+};
+
+/**
+ * Checks Dates.
+ * When a `timezone` (IANA name, e.g. "Europe/Berlin") is configured, the
+ * start/end wall-clock times are interpreted in that fixed time zone
+ * (daylight saving aware). Without it they fall back to the device's local
+ * time zone, i.e. the previous behaviour.
+ * @returns {boolean}
+ */
+const checkDate = () => {
+  // Convert "YYYY/MM/DD - HH:mm" to a wall-clock ISO-like string "YYYY-MM-DDTHH:mm".
+  const parseStartDate = startDate.replaceAll('/', '-').replace(' - ', 'T');
+  const parseEndDate = endDate.replaceAll('/', '-').replace(' - ', 'T');
+
+  const now = new Date();
+
+  if (!startDate && !endDate) {
+    // no times provided. so it's always valid
+    return true;
+  }
+
+  if (!startDate) {
+    // no start date given. only check valid end date
+    return toZonedDate(parseEndDate, timezone) > now;
+  }
+
+  if (!endDate) {
+    // no end date given. only check valid start date
+    return toZonedDate(parseStartDate, timezone) < now;
+  }
+
+  return toZonedDate(parseStartDate, timezone) < now &&
+    toZonedDate(parseEndDate, timezone) > now;
+};
+
+/**
+ * Checks if there is a page whitelist and only enables maintenance for these pages.
+ * @param {Object} currentRoute Current route.
+ * @returns {boolean}
+ */
+const pageWhitelistStatus = currentRoute => maintenancePagesWhitelist
+  .findIndex(element => currentRoute.pattern.includes(element)) >= 0 ||
+  maintenancePagesWhitelist.length === 0;
+
 /**
  * MaintenanceMode component.
+ * @returns {JSX}
  */
-class MaintenanceMode extends Component {
-  static propTypes = {
-    appVersion: PropTypes.string,
-    currentRoute: PropTypes.shape(),
-    isIosDevice: PropTypes.bool,
-    userEmail: PropTypes.string,
-  };
+const MaintenanceMode = () => {
+  const { classes } = useStyles();
+  const [showMaintenanceMode, setShowMaintenanceMode] = useState(true);
+  const touchTimeout = useRef();
 
-  static defaultProps = {
-    appVersion: null,
-    currentRoute: null,
-    isIosDevice: null,
-    userEmail: null,
-  };
+  const appVersion = useSelector(state => getClientInformation(state).appVersion);
+  const currentRoute = useSelector(getCurrentRoute);
+  const isIosDevice = useSelector(getIsIos);
+  const userEmail = useSelector(getUserEmail);
 
-  /**
-   * @inheritDoc
-   */
-  constructor(props) {
-    super(props);
-    this.handleTouchTimeout = undefined;
-    this.state = {
-      showMaintenanceMode: true,
-    };
-  }
+  const handleTouchStart = useCallback(() => {
+    touchTimeout.current = setTimeout(() => setShowMaintenanceMode(false), TOUCH_TIMEOUT);
+  }, []);
 
-  /**
-   * Handles touch start action.
-   */
-  handleTouchStart = () => {
-    this.handleTouchTimeout = setTimeout(() => {
-      this.setState({
-        showMaintenanceMode: false,
-      });
-    }, 5000);
-  };
+  const handleTouchEnd = useCallback(() => {
+    clearTimeout(touchTimeout.current);
+  }, []);
 
-  /**
-   * Handles touch end action.
-   */
-  handleTouchEnd = () => {
-    clearTimeout(this.handleTouchTimeout);
-  };
-
-  /**
-   * Checks if the app version is blocked.
-   * @param {string} appVersion App version
-   * @returns {boolean}
-   */
-  appVersionIsBlocked = (appVersion) => {
-    const appVersions = this.props.isIosDevice ? iosAppVersions : androidAppVersions;
-
-    // Block all versions
-    if (!appVersions.length) {
-      return true;
-    }
-
-    return appVersions.includes(appVersion);
-  };
-
-  /**
-   * Checks Dates.
-   * When a `timezone` (IANA name, e.g. "Europe/Berlin") is configured, the
-   * start/end wall-clock times are interpreted in that fixed time zone
-   * (daylight saving aware). Without it they fall back to the device's local
-   * time zone, i.e. the previous behaviour.
-   * @returns {boolean}
-   */
-  checkDate = () => {
-    // Convert "YYYY/MM/DD - HH:mm" to a wall-clock ISO-like string "YYYY-MM-DDTHH:mm".
-    const parseStartDate = startDate.replaceAll('/', '-').replace(' - ', 'T');
-    const parseEndDate = endDate.replaceAll('/', '-').replace(' - ', 'T');
-
-    const now = new Date();
-
-    if (!startDate && !endDate) {
-      // no times provide. so its always valid
-      return true;
-    }
-
-    if (!startDate) {
-      // no start date given. only check valid end date
-      return toZonedDate(parseEndDate, timezone) > now;
-    }
-
-    if (!endDate) {
-      // no end date given. only check valid start date
-      return toZonedDate(parseStartDate, timezone) < now;
-    }
-
-    return toZonedDate(parseStartDate, timezone) < now &&
-      toZonedDate(parseEndDate, timezone) > now;
-  };
-
-  /**
-  * Checks if there is a page whitelist and only enables maintenance for these pages.
-  * @param {Object} currentRoute App version
-  * @returns {boolean}
-  */
-  pageWhitelistStatus = currentRoute => maintenancePagesWhitelist
-    .findIndex(element => currentRoute.pattern.includes(element)) >= 0 ||
-    maintenancePagesWhitelist.length === 0;
-
-  /**
-  * Renders.
-  * @returns {JSX}
-  */
-  render() {
-    const {
-      userEmail, appVersion, currentRoute, isIosDevice,
-    } = this.props;
-
-    const maintenanceInfo = (images && images.length) ?
-      (
-        <div className={styles.background}>
-          <div className={styles.imageContainer}>
-            {showShopLogo && (<img
-              className={styles.image}
-              src={appConfig.logo}
-              alt={appConfig.shopName}
-              onTouchStart={this.handleTouchStart}
-              onTouchEnd={this.handleTouchEnd}
-            />)}
-            {images.map(({ imageSource, imageHref }) => (
-              <button type="button" onClick={() => openPageExtern({ src: imageHref })}>
-                <img className={styles.image} src={imageSource} alt={appConfig.shopName} />
-              </button>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div className={styles.background}>
-          <div className={styles.container}>
-            {showShopLogo &&
-              (<img className={styles.image} src={appConfig.logo} alt={appConfig.shopName} />)
-            }
-            <h3 onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd}>
-              {customHeadline || <I18n.Text string="maintenanceMode.headline.text" />}
-            </h3>
-            {customMessage || <I18n.Text string="maintenanceMode.message.text" />}
-            {(!isIosDevice && androidLink) && (
-              <Link className={styles.linkButton} href={androidLink} state={{ target: '_blank' }}>
-                <Button>{androidButtonText}</Button>
-              </Link>
-            )}
-            {(isIosDevice && iosLink) && (
-              <Link className={styles.linkButton} href={iosLink} state={{ target: '_blank' }}>
-                <Button>{iosButtonText}</Button>
-              </Link>
-            )}
-          </div>
-        </div>
-      );
-    if (
-      !IS_PAGE_PREVIEW_ACTIVE &&
-      enableMaintenanceMode &&
-      this.pageWhitelistStatus(currentRoute) &&
-      !testUser.includes(userEmail) &&
-      this.state.showMaintenanceMode &&
-      this.appVersionIsBlocked(appVersion) &&
-      this.checkDate()
-    ) {
-      return maintenanceInfo;
-    }
+  if (
+    IS_PAGE_PREVIEW_ACTIVE ||
+    !enableMaintenanceMode ||
+    !pageWhitelistStatus(currentRoute) ||
+    testUser.includes(userEmail) ||
+    !showMaintenanceMode ||
+    !appVersionIsBlocked(isIosDevice, appVersion) ||
+    !checkDate()
+  ) {
     return null;
   }
-}
 
-/**
- * @param {Object} state The current application state
- * @return {string}
- */
-const mapStateToProps = state => ({
-  appVersion: getClientInformation(state).appVersion,
-  currentRoute: getCurrentRoute(state),
-  isIosDevice: isIos(state),
-  userEmail: getUserEmail(state),
-});
+  if (images && images.length) {
+    return (
+      <div className={classes.background}>
+        <div className={classes.imageContainer}>
+          {showShopLogo && appConfig.logo && (
+            <img
+              className={classes.image}
+              src={appConfig.logo}
+              alt={appConfig.shopName}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+            />
+          )}
+          {images.map(({ imageSource, imageHref }) => (
+            <button
+              key={imageSource}
+              type="button"
+              onClick={() => openPageExtern({ src: imageHref })}
+            >
+              <img className={classes.image} src={imageSource} alt={appConfig.shopName} />
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
-export default connect(mapStateToProps)(MaintenanceMode);
+  return (
+    <div className={classes.background}>
+      <div className={classes.container}>
+        {showShopLogo && appConfig.logo && (
+          <img className={classes.image} src={appConfig.logo} alt={appConfig.shopName} />
+        )}
+        <h3 onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+          {customHeadline || <I18n.Text string="maintenanceMode.headline.text" />}
+        </h3>
+        {customMessage || <I18n.Text string="maintenanceMode.message.text" />}
+        {(!isIosDevice && androidLink) && (
+          <Link className={classes.linkButton} href={androidLink} state={{ target: '_blank' }}>
+            <Button color="primary">{androidButtonText}</Button>
+          </Link>
+        )}
+        {(isIosDevice && iosLink) && (
+          <Link className={classes.linkButton} href={iosLink} state={{ target: '_blank' }}>
+            <Button color="primary">{iosButtonText}</Button>
+          </Link>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default MaintenanceMode;

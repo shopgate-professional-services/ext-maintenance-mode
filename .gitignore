@@ -60,10 +60,10 @@ typings/
 # dotenv environment variables file
 .env
 
-package-lock.json
-extension/package-lock.json
-frontend/package-lock.json
 frontend/config.json
 
 # IDE
 .idea
+
+frontend/yarn.lock
+frontend/package-lock.json

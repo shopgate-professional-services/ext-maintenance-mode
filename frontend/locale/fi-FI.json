@@ -1,0 +1,10 @@
+{
+  "maintenanceMode": {
+    "headline": {
+      "text": "Huolto"
+    },
+    "message": {
+      "text": "Tämä sovellus ei ole tilapäisesti käytettävissä huollon vuoksi."
+    }
+  }
+}

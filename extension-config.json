@@ -32,6 +32,51 @@
       "type": "translations",
       "path": "frontend/locale/it-IT.json",
       "id": "locale/it-IT"
+    },
+    {
+      "type": "translations",
+      "path": "frontend/locale/cs-CZ.json",
+      "id": "locale/cs-CZ"
+    },
+    {
+      "type": "translations",
+      "path": "frontend/locale/el-GR.json",
+      "id": "locale/el-GR"
+    },
+    {
+      "type": "translations",
+      "path": "frontend/locale/fi-FI.json",
+      "id": "locale/fi-FI"
+    },
+    {
+      "type": "translations",
+      "path": "frontend/locale/hu-HU.json",
+      "id": "locale/hu-HU"
+    },
+    {
+      "type": "translations",
+      "path": "frontend/locale/nl-NL.json",
+      "id": "locale/nl-NL"
+    },
+    {
+      "type": "translations",
+      "path": "frontend/locale/pl-PL.json",
+      "id": "locale/pl-PL"
+    },
+    {
+      "type": "translations",
+      "path": "frontend/locale/pt-PT.json",
+      "id": "locale/pt-PT"
+    },
+    {
+      "type": "translations",
+      "path": "frontend/locale/ro-RO.json",
+      "id": "locale/ro-RO"
+    },
+    {
+      "type": "translations",
+      "path": "frontend/locale/sv-SE.json",
+      "id": "locale/sv-SE"
     }
   ],
   "configuration": {
