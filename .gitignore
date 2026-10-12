@@ -64,5 +64,3 @@ frontend/config.json
 
 # IDE
 .idea
-
-frontend/yarn.lock
