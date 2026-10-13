@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { appConfig } from '@shopgate/engage';
 import { getCurrentRouteHelper as getCurrentRoute } from '@shopgate/engage/core/helpers';
@@ -7,9 +7,10 @@ import {
   getIsIos,
 } from '@shopgate/engage/core/selectors';
 import { openPageExtern } from '@shopgate/engage/core/commands';
+import { useLongPress } from '@shopgate/engage/core/hooks';
 import { Link, I18n } from '@shopgate/engage/components';
 import { Button } from '@shopgate/engage/components/v2';
-import { IS_PAGE_PREVIEW_ACTIVE } from '@shopgate/engage/page/constants';
+import { isAdminPreviewActive } from '@shopgate/engage/admin-preview/helpers';
 import { getUserEmail } from '@shopgate/engage/user';
 import { makeStyles } from '@shopgate/engage/styles';
 import getConfig from '../../helpers/getConfig';
@@ -142,23 +143,19 @@ const pageWhitelistStatus = currentRoute => maintenancePagesWhitelist
 const MaintenanceMode = () => {
   const { classes } = useStyles();
   const [showMaintenanceMode, setShowMaintenanceMode] = useState(true);
-  const touchTimeout = useRef();
 
   const appVersion = useSelector(state => getClientInformation(state).appVersion);
   const currentRoute = useSelector(getCurrentRoute);
   const isIosDevice = useSelector(getIsIos);
   const userEmail = useSelector(getUserEmail);
 
-  const handleTouchStart = useCallback(() => {
-    touchTimeout.current = setTimeout(() => setShowMaintenanceMode(false), TOUCH_TIMEOUT);
-  }, []);
-
-  const handleTouchEnd = useCallback(() => {
-    clearTimeout(touchTimeout.current);
-  }, []);
+  const longPressHandlers = useLongPress(
+    () => setShowMaintenanceMode(false),
+    { threshold: TOUCH_TIMEOUT }
+  );
 
   if (
-    IS_PAGE_PREVIEW_ACTIVE ||
+    isAdminPreviewActive() ||
     !enableMaintenanceMode ||
     !pageWhitelistStatus(currentRoute) ||
     testUser.includes(userEmail) ||
@@ -173,13 +170,12 @@ const MaintenanceMode = () => {
     return (
       <div className={classes.background}>
         <div className={classes.imageContainer}>
-          {showShopLogo && appConfig.logo && (
+          {showShopLogo && (appConfig.logo || appConfig.logoFallback) && (
             <img
               className={classes.image}
-              src={appConfig.logo}
+              src={appConfig.logo || appConfig.logoFallback}
               alt={appConfig.shopName}
-              onTouchStart={handleTouchStart}
-              onTouchEnd={handleTouchEnd}
+              {...longPressHandlers}
             />
           )}
           {images.map(({ imageSource, imageHref }) => (
@@ -199,10 +195,14 @@ const MaintenanceMode = () => {
   return (
     <div className={classes.background}>
       <div className={classes.container}>
-        {showShopLogo && appConfig.logo && (
-          <img className={classes.image} src={appConfig.logo} alt={appConfig.shopName} />
+        {showShopLogo && (appConfig.logo || appConfig.logoFallback) && (
+          <img
+            className={classes.image}
+            src={appConfig.logo || appConfig.logoFallback}
+            alt={appConfig.shopName}
+          />
         )}
-        <h3 onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+        <h3 {...longPressHandlers}>
           {customHeadline || <I18n.Text string="maintenanceMode.headline.text" />}
         </h3>
         {customMessage || <I18n.Text string="maintenanceMode.message.text" />}
