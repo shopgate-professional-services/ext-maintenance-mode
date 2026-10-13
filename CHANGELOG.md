@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.0.0] - 2026-10-08
+### Added
+- Added translations for the remaining PWA locales (`cs-CZ`, `el-GR`, `fi-FI`, `hu-HU`, `nl-NL`, `pl-PL`, `pt-PT`, `ro-RO`, `sv-SE`).
+### Changed
+- 🔥 Breaking change: the extension now requires PWA 7.32.0 or newer. The maintenance overlay is now styled through `@shopgate/engage/styles` (`makeStyles`) and uses the theme background color instead of the static glamor styles, so it follows the theme configuration of the shop (including the dark color scheme).
+- The portal is now a function component that reads its data via `useSelector` hooks instead of `connect`.
+### Removed
+- Removed the glamor styling.
+
 ## [2.5.1] 2026-09-16
 ### Removed
 - pwa peerDependencies version check

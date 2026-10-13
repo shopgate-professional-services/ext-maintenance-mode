@@ -1,0 +1,10 @@
+{
+  "maintenanceMode": {
+    "headline": {
+      "text": "Underhåll"
+    },
+    "message": {
+      "text": "Den här appen är tillfälligt otillgänglig på grund av underhåll."
+    }
+  }
+}
