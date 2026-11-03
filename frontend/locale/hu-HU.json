@@ -1,0 +1,10 @@
+{
+  "maintenanceMode": {
+    "headline": {
+      "text": "Karbantartás"
+    },
+    "message": {
+      "text": "Ez az alkalmazás karbantartás miatt átmenetileg nem érhető el."
+    }
+  }
+}

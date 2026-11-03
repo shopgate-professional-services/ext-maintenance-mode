@@ -1,0 +1,10 @@
+{
+  "maintenanceMode": {
+    "headline": {
+      "text": "Konserwacja"
+    },
+    "message": {
+      "text": "Ta aplikacja jest tymczasowo niedostępna z powodu prac konserwacyjnych."
+    }
+  }
+}
